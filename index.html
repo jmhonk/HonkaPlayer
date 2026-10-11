@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HonkaPlayer</title>
+  <meta name="description" content="HonkaPlayer – Winamp-henkinen musiikkisoitin Windowsille. Ei asennusta: pura zip ja käynnistä.">
+  <meta name="theme-color" content="#0e0f11">
+  <link rel="icon" href="honkaplayer_icon.png">
+  <link rel="apple-touch-icon" href="honkaplayer_icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0e0f11;
+      --surface: #16181b;
+      --surface-2: #202328;
+      --line: #2a2e34;
+      --ink: #eef2ef;
+      --muted: #9aa49e;
+      --green: #1ed760;
+      --green-hi: #4fe383;
+      --on-green: #04210f;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Figtree", system-ui, sans-serif;
+      font-size: 17px;
+      line-height: 1.6;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    a { color: var(--green); }
+    a:focus-visible, .btn:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+    h1, h2 { font-family: "Bricolage Grotesque", system-ui, sans-serif; }
+
+    /* ---------- Hero ---------- */
+    header {
+      background:
+        radial-gradient(760px 380px at 82% 0%, rgba(30, 215, 96, .16), transparent 70%),
+        linear-gradient(180deg, #121614 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--line);
+      padding: 56px 0 0;
+      overflow: hidden;
+    }
+
+    .app-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      display: block;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      font-weight: 800;
+      font-size: clamp(44px, 10vw, 88px);
+      line-height: .98;
+      letter-spacing: -0.02em;
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .lead {
+      font-size: 20px;
+      line-height: 1.5;
+      margin: 20px 0 0;
+      max-width: 38ch;
+    }
+
+    .lead span { display: block; color: var(--muted); font-size: 17px; margin-top: 6px; }
+
+    .facts {
+      list-style: none;
+      margin: 28px 0 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .facts li {
+      border: 1px solid var(--line);
+      background: rgba(30, 215, 96, .07);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 15px;
+    }
+
+    .facts li::before {
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      margin-right: 8px;
+      vertical-align: 1px;
+    }
+
+    /* Kuvakaappaus nousee hero-osion alareunasta */
+    .shot {
+      margin: 48px 0 0;
+      border-radius: 14px 14px 0 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-bottom: none;
+      box-shadow: 0 -10px 60px rgba(30, 215, 96, .08), 0 30px 80px rgba(0, 0, 0, .6);
+    }
+
+    .shot img { display: block; width: 100%; height: auto; }
+
+    /* ---------- Lataus ---------- */
+    .start {
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      padding: 40px 0;
+    }
+
+    .start-inner {
+      display: grid;
+      gap: 20px;
+      align-items: center;
+    }
+
+    h2 {
+      font-weight: 700;
+      font-size: 34px;
+      line-height: 1.1;
+      margin: 0;
+      color: var(--green);
+    }
+
+    .steps { display: grid; gap: 12px; }
+
+    .btn, .step {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 18px;
+      text-decoration: none;
+      border: 2px solid var(--green);
+    }
+
+    .btn .n, .step .n {
+      display: inline-grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 16px;
+      flex: none;
+    }
+
+    .btn-primary { background: var(--green); color: var(--on-green); }
+    .btn-primary .n { background: var(--on-green); color: var(--green); }
+    .btn-primary:hover { background: var(--green-hi); border-color: var(--green-hi); }
+
+    .step { color: var(--ink); border-color: var(--line); background: var(--surface-2); }
+    .step .n { background: var(--bg); color: var(--green); }
+    .step code { font-family: Consolas, ui-monospace, monospace; font-size: 16px; color: var(--green); }
+
+    .note { margin: 4px 0 0; color: var(--muted); font-size: 15px; }
+    .note strong { color: var(--ink); font-weight: 600; }
+
+    /* ---------- Kielet ---------- */
+    main.wrap { padding-top: 56px; padding-bottom: 24px; }
+
+    .langs { display: grid; gap: 48px; }
+
+    .lang h2 { margin-bottom: 14px; }
+
+    .lang > p { margin: 0 0 22px; max-width: 62ch; }
+
+    .features {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .features li {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 16px;
+      color: var(--muted);
+    }
+
+    .features strong {
+      display: block;
+      color: var(--ink);
+      font-size: 17px;
+      margin-bottom: 2px;
+    }
+
+    footer.wrap {
+      padding-top: 32px;
+      padding-bottom: 48px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    @media (min-width: 860px) {
+      .start-inner { grid-template-columns: 1fr 1.4fr; }
+      .langs { grid-template-columns: 1fr 1fr; gap: 56px; }
+      .features { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="wrap">
+    <img class="app-icon" src="honkaplayer_icon.png" alt="HonkaPlayer app icon" width="72" height="72">
+    <h1>HonkaPlayer</h1>
+    <p class="lead">
+      Kaikkien tarpeisiin sopiva musiikkisoitin Windowsille.
+      <span lang="en">A music player for your own music library on Windows.</span>
+    </p>
+    <ul class="facts">
+      <li>Ei asennusta</li>
+      <li>Ei tiedonkeruuta</li>
+      <li>Ei mainoksia</li>
+      <li>Windows 10 &amp; 11</li>
+    </ul>
+    <div class="shot">
+      <img src="honkaplayer_screenshot.png" width="1600" height="989" alt="HonkaPlayer: soitin, kirjasto ja jono">
+    </div>
+  </div>
+</header>
+
+<section class="start">
+  <div class="wrap start-inner">
+    <h2>Aloita käyttö</h2>
+    <div class="steps">
+      <a class="btn btn-primary" href="https://github.com/jmhonk/HonkaPlayer/releases/latest/download/HonkaPlayer.zip">
+        <span class="n">1</span> Lataa HonkaPlayer.zip
+      </a>
+      <div class="step">
+        <span class="n">2</span> <span>Pura zip ja käynnistä <code>HonkaPlayer.exe</code></span>
+      </div>
+      <p class="note">
+        Asennusta ei tarvita – kansion voi pitää missä tahansa, myös muistitikulla.<br>
+        Ensimmäisellä käynnistyksellä Windows voi näyttää ilmoituksen <em>”Windows suojasi tietokonettasi”</em>:
+        valitse <strong>Lisätietoja → Suorita silti</strong>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<main class="wrap">
+  <div class="langs">
+
+    <section class="lang">
+      <h2>Suomeksi</h2>
+      <p>HonkaPlayer on Winamp-henkinen musiikkisoitin koneelle tallennetulle musiikille. Lisää musiikkikansiot, ja soitin lukee kappaleiden tiedot ja järjestää kirjaston esittäjän, albumin ja genren mukaan. Kaikki pysyy omalla koneellasi: soitin ei lähetä mitään minnekään eikä näytä mainoksia.</p>
+      <ul class="features">
+        <li><strong>Kirjasto</strong>Haku, järjestys ja ryhmittely – sujuva tuhansillakin kappaleilla.</li>
+        <li><strong>Soittolistat ja jono</strong>Omat soittolistat ja vapaasti muokattava soittojono.</li>
+        <li><strong>Taajuuskorjain</strong>10 kaistaa, esivahvistus ja valmiit esiasetukset.</li>
+        <li><strong>Tasainen äänenvoimakkuus</strong>Kappaleet soivat suunnilleen yhtä kovaa.</li>
+        <li><strong>Ristihäivytys</strong>Kappaleet liukuvat sulavasti toisiinsa.</li>
+        <li><strong>Mediapainikkeet</strong>Toimivat aina, ja soiva kappale näkyy Windowsin mediapaneelissa.</li>
+        <li><strong>Teemat</strong>Moderni ja Klassikko sekä viisi korostusväriä.</li>
+        <li><strong>Pienennä</strong>Pelkkä soitin pienessä ikkunassa, kun kirjastoa ei tarvita.</li>
+      </ul>
+    </section>
+
+    <section class="lang" lang="en">
+      <h2>In English</h2>
+      <p>HonkaPlayer is a Winamp-inspired music player for the music stored on your computer. Add your music folders and the player reads the track details and organises the library by artist, album and genre. Everything stays on your computer: nothing is uploaded and there are no ads. The user interface is in Finnish.</p>
+      <ul class="features">
+        <li><strong>Library</strong>Search, sorting and grouping – smooth even with thousands of tracks.</li>
+        <li><strong>Playlists and queue</strong>Your own playlists and a freely editable play queue.</li>
+        <li><strong>Equalizer</strong>10 bands, preamp and ready-made presets.</li>
+        <li><strong>Volume levelling</strong>Tracks play at roughly the same loudness.</li>
+        <li><strong>Crossfade</strong>Tracks blend smoothly into each other.</li>
+        <li><strong>Media keys</strong>Always work, and the current track shows in the Windows media panel.</li>
+        <li><strong>Themes</strong>Modern and Classic styles with five accent colours.</li>
+        <li><strong>Compact mode</strong>Just the player in a small window when you don't need the library.</li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+<footer class="wrap">
+  © 2026 Jari-Matti Honkanen •
+  Contact: <a href="mailto:jmhonkanen@outlook.com">jmhonkanen@outlook.com</a>
+</footer>
+
+</body>
+</html>
